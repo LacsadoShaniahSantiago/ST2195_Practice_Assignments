@@ -1,0 +1,42 @@
+---
+title: "ST2195 Scrapping"
+author: "Shaniah Santiago"
+date: "2025-10-07"
+output: html_document
+---
+## Scraping Website
+Library
+```{r}
+if (!("revest" %in% installed.packages())){
+  install.packages("rvest")
+}
+library(rvest)
+```
+
+Website
+```{r}
+wiki_url <- "https://en.wikipedia.org/wiki/Comma-separated_values"
+wiki_web <- read_html(wiki_url)
+```
+
+Findng Examples and Retrieving Text
+```{r}
+wiki_examples <- wiki_web %>% html_nodes(xpath = '//h2[contains(., "Example")]//following-sibling::pre') %>% html_text()
+
+wiki_examples
+```
+Retrieving First Table
+```{r}
+wiki_table <- wiki_examples[1]
+```
+
+### Saving to CSV File
+```{r}
+write.table(wiki_table, file="car.csv", quote = FALSE, col.names = FALSE, row.names = FALSE, append = FALSE)
+```
+
+### Check to see saved
+```{r}
+read.csv("car.csv")
+```
+
