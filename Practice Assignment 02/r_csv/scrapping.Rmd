@@ -1,0 +1,100 @@
+---
+title: "ST2195 Scrapping"
+author: "Shaniah Santiago"
+date: "2025-10-07"
+output: html_document
+---
+## Scraping Website
+### Installing Necessary Packages
+```{r}
+if (!("revest" %in% installed.packages())){
+  install.packages("rvest")
+}
+```
+### Library
+```{r}
+library(rvest)
+library(stringr)
+```
+
+## Website
+```{r}
+sim_url <- "https://www.sim.edu.sg/"
+sim_web <- read_html(sim_url) ## Reading as a html document and initializing it in sim_web
+```
+
+## Finding Contacts and Retrieving Text
+Locate the "contact-item" anchors inside "footer" and retrieve only the text
+```{r}
+sim_contacts <- sim_web %>% 
+                #html_nodes(xpath = '//footer//div[contains(@class,"contact-item")]/span[2]') %>% html_text()
+                html_elements(xpath='//footer//div[contains(@class, "contact-item")]//span') %>% html_text()
+
+sim_contacts
+```
+
+### Cleaning Contacts
+Use grepl for partial comparison
+Using stringr package to format texts and manipulate string text to retrieve the relevant contact information.
+```{r}
+# #Remove "Getting Here"
+# sim_contacts <- gsub("Getting here", "", sim_contacts)
+# 
+# #Remove empty strings
+# sim_contacts <- sim_contacts[nchar(sim_contacts) > 0] 
+# 
+# sim_contacts
+
+contact_vec = c()
+index <-1
+for (item in sim_contacts) {
+  if (grepl("email", tolower(item))) {
+    email <- sim_contacts[index+1]
+    email <- str_trim(email)
+    print(email)
+    contact_vec = c(contact_vec, email)
+  }
+  
+  if(grepl("phone", tolower(item))){
+    phone <- sim_contacts[index+1]
+    phone <- str_trim(phone)
+    
+    #Retrieve only 8 Digits
+    phone <- substr(phone, 1,9)
+    
+    print(phone)
+    contact_vec = c(contact_vec, phone)
+  }
+  
+  if(grepl("address", tolower(item))){
+    address <- sim_contacts[index+1]
+    address <- str_trim(address)
+    
+    #Retrieiving only address
+    pos <- regexpr("Singapore", address)
+    address <- substr(address,1 , pos+15)
+    
+    print(address)
+    contact_vec = c(contact_vec, address)
+  }
+  
+  index <- index +1
+}
+
+```
+
+### Check Contact List
+```{r}
+contact_vec
+```
+
+## Saving to CSV File
+```{r}
+write.table(contact_vec, "sim_Contact_Info.csv", sep=",", row.names=FALSE, col.names=FALSE, quote=FALSE)
+```
+
+### Check CSV File Exists and Includes Information
+```{r}
+read.csv("sim_Contact_Info.csv", header=FALSE)
+```
+
