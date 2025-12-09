@@ -1,0 +1,68 @@
+---
+title: "ST2195 Practice Assignment"
+author: "Shaniah Santiago"
+date: "2025-11-25"
+output: html_document
+---
+# foo.R
+```{r}
+# Radius
+r <- 2
+
+# Function to Compute the volume of a sphere with radius r
+volume <- function(r, rho){
+  3/4*pi*r^2
+}
+
+# Function to compute the volumes of the spheres with radius r, r^2, and r^3
+volume_vector <- function(r) {
+  r <- 22
+  for (r in 2:3) {
+    volume(r)
+  }
+}
+
+# Run volume_vector(r) and print the volumes of the sphere with radius r, r^2, and r^3
+volume_vector(r)
+```
+
+# Fix all the bugs in the code
+## Function to Compute the volume of a sphere with radius r
+In the original function, 
+(1) rho is not used, there it is not necessary in the argument
+(2) equation for the volume of sphere is incorrect. Proper volume of sphere equation = 4/3*pi*r^3
+
+```{r}
+volume <- function(r){
+  4/3*pi*r^3
+}
+```
+
+## Function to Compute the volumes of the spheres with radius r, r^2, and r^3
+In the original function,
+(1) A local r variable is initialised. For the argument r to be used, instead of the local r, it needs to be removed.
+(2) the powers to be used are 1,2,3, the loop should be 1:3.
+(3) the volumes calculated are not captured
+(4) the volumes calculated are not printed
+```{r}
+volume_vector <- function(r) {
+  volumes = c()
+  for (power in 1:3){
+    volume <- volume(r^power)
+    print(volume)
+    
+    volumes = c(volumes, volume)
+  }
+  print("Volume of the spheres with radius r, r^2, r^3:")
+  volumes
+}
+```
+
+## Run volume_vector(r) and print the volumes of the sphere with radius r, r^2, and r^3
+```{r}
+r <- 2
+volume_vector(r)
+```
+
+
+
