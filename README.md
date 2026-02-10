@@ -7,5 +7,66 @@
 
 ## Practice Assignment 02
   1.  A “README.md” file with a short markdown description of this assignment.
-  2.  A folder called “r_csv” with a R code for scraping the CSV example on cars in the Wikipedia page [https://en.wikipedia.org/wiki/Commaseparated_values] and saving the resulting output in the local folder (in CSV)
+  2.  A folder called “r_csv” with a R code for scraping the contact details on SIM main page [https://www.sim.edu.sg/] and saving the resulting output in the local folder (in CSV)
   3.  A folder called “python_csv” with a Python version of the code in point 2
+
+## Practice Assignment 03
+Download Data Expo 2009 data from Harvard Dataverse [https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/HG7NV7] and construct an SQLite Database called "airline.db" with the following tables:
+  1. ontime (with the data from 2000 to 2005 – including 2000 and 2005) 
+  2. airports (with the data in airports.csv) 
+  3. carriers (with the data in carriers.csv) 
+  4. planes (with the data in plane-data.csv)
+
+Assignment includes the following: 
+  1. A “README.md” file with a short markdown description of this assignment and a reference to the Data Expo 2009 data, and the Harvard Dataverse
+  2. An R code for constructing the database (from the csv inputs) and executing the following queries. The latter should be done both using DBI and dplyr notation.
+  - Which airplanes has the lowest associated average departure delay (excluding cancelled and diverted flights)? 
+  - Which cities has the highest number of inbound flights (excluding cancelled flights)? 
+  - Which companies has the highest number of cancelled flights? 
+  - Which companies has the highest number of cancelled flights, relative to their number of total flights? 
+  3. A folder called “python_sql” with a Python version of the code in point 2, based on sqlite3
+
+## Practice Assignment 04
+1. Find and fix all the bugs in code. Instructions are given in the form of comments in the code.
+2. Update "foo.R" by commiting and pushing the revisions
+
+## Practice Assignment 05
+1. Find and fix all the bugs in code. Instructions are given in the form of comments in the code.
+2. Update "foo.py" by committing and pushing revisions.
+
+## Practice Assignment 06
+Download the ECB speeches dataset "all_ECB_speeches.csv"[https://www.ecb.europa.eu/press/key/html/downloads.en.html] and daily EUR/USD reference exchange rate from the ECB Statistical Data Warehouse “data.csv” [https://sdw.ecb.europa.eu/browse.do?node=9691296]. Save as s “speeches.csv” and “fx.csv”. For the speeches.csv, please keep only the “date” and “contents” columns.
+
+Assignment includes the following:
+1. Load and merge the datasets keeping all information available for the dates in which there is a measurement in “fx.csv”.
+2. Remove entries with obvious outliers or mistakes, if any.
+3. Handle missing observations for the exchange rate, if any. This should be done replacing any missing exchange rate with the latest information available. Whenever this cannot be done, the relevant entry should be removed entirely from the dataset.
+4. Calculate the exchange rate return. Extend the original dataset with the following variables: “good_news” (equal to 1 when the exchange rate return is larger than 0.5 percent, 0 otherwise) and “bad_news” (equal to 1 when the exchange rate return is lower than -0.5 percent, 0 otherwise).
+5. Remove the entries for which contents column has NA values. Generate and store in csv the following tables:
+  - “good_indicators” – with the 20 most common words (excluding articles, prepositions and similar connectors) associated with entries wherein “good_news” is equal to 1;
+  -  “bad_indicators” – with the 20 most common words (excluding articles, prepositions and similar connectors) associated with entries wherein “bad_news” is equal to 1; 
+
+## Practice Assignment 07
+Download the Titanic dataset from Kaggle [https://www.kaggle.com/c/titanic/data]. Unzip the folder and use only the “train.csv” file. Rename the file as “titanic.csv”. 
+
+Assigmnet includes the following:
+1. Generate a series of bar charts to describe the gender, ticket class and survival of the passengers onboard.
+2. Generate a histogram for the passengers’ age. Furthermore, describe the passengers’ age using the following two boxplots: age per ticket class and age based on survival.
+3. Generate a histogram for the travel fare and a table showing the number of people who did not pay – you may want to check on Google why a handful of people was on board for free!
+4. A chart of your choice to describe the family size per ticket class.
+5. A series of stacked bar charts to show the how survival differs for different gender and ticket class.
+6. A violin chart describing how survival related to age and gender.
+7. A violin chart describing the survival rate related to age and ticket class.
+
+## Practice Assignment 08
+1. In Practice Assignment 08_1, replicate assignment 7 in Python:
+  - Generate a series of bar charts to describe the gender, ticket class and survival of the passengers onboard.
+  - Generate a histogram for the passengers’ age. Furthermore, describe the passengers’ age using the following two boxplots: age per ticket class and age based on survival.
+  - Generate a histogram for the travel fare and a table showing the number of people who did not pay.
+  - A chart of your choice to describe the family size per ticket class.
+  - A series of stacked bar charts to show the how survival differs for different gender and ticket class.
+  - A violin chart describing how survival related to age and gender.
+  - A violin chart describing the survival rate related to age and ticket class.
+
+2.  In Practice Assignment 08_2, describe the latest bilateral trade data for the G7 (this aggregate can be computed using bilateral imports and exports data available on the IMF Direction of Trade Statistics [https://data.imf.org/?sk=9d6028d4-f14a-464c-a2f2-59b2cd424b85]) with the three network graphical representations in the module on network visualization.
+3.  In Practice Assignment 08_3, repeat the second bullet point using one year ago data and compare the output with the latest results using a 3x2 subplot containing all the network representations.
