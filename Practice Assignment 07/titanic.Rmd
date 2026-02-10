@@ -1,0 +1,160 @@
+---
+title: "titanic"
+output: html_document
+---
+Setting Up Environment
+```{r}
+#install.packages("ggplot2")
+```
+
+### Steps to Resolve Issue with ggplot2
+1. Run "install.packages(c("rlang", "vctrs", "cli", "ggplot2"))"
+2. Rerun all code chunks
+3. Issue arises: "rlang 1.1.6 is already loaded, 1.1.7 is required"
+4. Restart R: Session -> Restart R
+5. Run code in R terminal
+```{r}
+#install.packages(c("rlang", "vctrs", "cli", "ggplot2"))
+#install.packages("rlang")
+#install.packages("ggplot2")
+#library(ggplot2)
+```
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+Initializing Data
+```{r}
+df <- read.csv("titanic.csv")
+head(df)
+```
+
+Calculate Family Size
+Adding Siblings/spouses and number of parents or children onboard Titanic
+```{r}
+df$family_size <- df$SibSp + df$Parch+1
+df
+```
+
+
+Generate a series of bar charts to describe the gender, ticket class and survival of the passengers onboard
+```{r}
+gender_bar <- ggplot(df) + aes(x=Sex, fill=Sex) + geom_bar() + labs(title = "Gender of Passengers Onboard")
+gender_bar
+```
+
+```{r}
+df %>%
+  mutate(Pclass = factor(x=Pclass, levels=c(1,2,3), 
+                         labels=c("1st","2nd","3rd"))) %>%
+  ggplot(aes(x=Pclass, fill=Pclass)) + 
+  geom_bar() + 
+  ggtitle("Ticket class of the passengers onboard") + 
+  xlab("Ticket Class") +
+  theme(legend.position="none")
+```
+
+```{r}
+df %>% mutate(Survived=factor(x=Survived, levels=c(0,1), labels=c("No","Yes"))) %>% ggplot(aes(x=Survived, fill=Survived)) + geom_bar() + ggtitle("Survival of Passengers Onboard") + theme(legend.position = "none")
+```
+
+Generate a histogram for the passengers’ age. Furthermore, describe the passengers’ age using the following two boxplots: age per ticket class and age based on survival.
+
+```{r}
+age_hist <- ggplot(df) + aes(x=Age, y=..density..) + geom_histogram(fill="hotpink", bins=20, na.rm=TRUE) + ggtitle("Distribution of Age of Passengers Onboard")
+
+age_hist
+```
+```{r}
+df %>%
+  mutate(Pclass=factor(x=Pclass,levels=c(1,2,3), labels=c("1st","2nd","3rd"))) %>%
+  ggplot(aes(x=Pclass, y=Age, fill=Pclass)) + geom_boxplot(na.rm=TRUE) +
+  ggtitle("Age of Passengers Onboard") +
+  xlab("Ticket Class") +
+  theme(legend.position = "none")
+```
+```{r}
+df %>%
+  mutate(Survived = factor(x=Survived, levels=c(0,1), labels=c("No","Yes"))) %>%
+  ggplot(aes(x=Survived, y=Age, fill=Survived)) + geom_boxplot(na.rm=TRUE) + 
+  ggtitle("Age of Passengers Onboard") +
+  theme(legend.position = "none")
+```
+Generate a histogram for the travel fare and a table showing the number 
+of people who did not pay
+```{r}
+fare_hist <- ggplot(df) +
+  aes(x=Fare, y=..density..) +
+  geom_histogram(fill="lightgreen", bins=30, na.rm=TRUE) +
+  ggtitle("Ticket Fare of Passengers Onboard")
+
+fare_hist
+```
+Table showing the number of people who did not pay
+```{r}
+paid <- table(df$Fare !=0)
+names(paid) <- c("Not Paid", "Paid")
+paid
+```
+A chart of your choice to describe the family size per ticket class 
+```{r}
+df %>% 
+  mutate(Pclass=factor(x=Pclass, levels=c(1,2,3), labels=c("1st","2nd","3rd"))) %>%
+  ggplot(aes(x=family_size, y=..density.., fill=Pclass)) +
+  geom_histogram(bins=11) +
+  facet_grid(Pclass ~ ., scales="free") +
+  guides(fill=FALSE) +
+  ggtitle("Family Size Per Ticket Class")
+```
+
+A series of stacked bar charts to show the how survival differs for different gender and ticket class
+i. A series of stacked bar charts to show the how survival differs for different gender 
+```{r}
+df %>% 
+  mutate(Survived=factor(x=Survived, levels=c(0,1), labels=c("No","Yes"))) %>% 
+  ggplot(aes(fill=Survived, x=Sex)) +
+  geom_bar(position="stack") +
+  ggtitle("Survival By Gender") +
+  xlab("Gender") +
+  guides(fill=guide_legend("Survival"))
+```
+ii. A series of stacked bar charts to show the how survival differs for different ticket class 
+```{r}
+df %>%
+  mutate(Survived=factor(x=Survived, levels=c(0,1), labels=c("No","Yes"))) %>%
+  mutate(Pclass=factor(x=Pclass, levels=c(1,2,3), labels=c("1st", "2nd","3rd"))) %>%
+  ggplot(aes(fill=Survived, x=Pclass)) +
+  geom_bar(position="stack") +
+  ggtitle("Survival by Ticket Class") +
+  xlab("Ticket Class") +
+  guides(fill=guide_legend("Survival"))
+```
+
+A violin chart describing how survival related to age and gender 
+na.rm=TRUE: does not include any missing or NA values in the count.
+```{r}
+df %>% 
+  mutate(Survived=factor(x=Survived, levels=c(0,1), labels=c("No","Yes"))) %>%
+  ggplot(aes(x=Sex, y=Age, fill=Survived)) +
+  geom_violin(na.rm=TRUE, adjust=0.5)
+```
+
+A violin chart describing the survival rate related to age and ticket class
+1. Initialise dataframe to use, titanic
+2. Specify Survival Categorical value
+3. Change Pclass to Categorical value
+4. Plot parameters x-axis, y-axis, and value
+5. Specify plot diagram to use
+6. Add caption of xaxis of the plot diagram
+```{r}
+df %>%
+  mutate(Survived=factor(x=Survived, levels=c(0,1), labels=c("No", "Yes"))) %>%
+  mutate(Pclass=factor(x=Pclass, levels=c(1,2,3), labels=c("1st","2nd","3rd"))) %>%
+  ggplot(aes(x=Pclass, y=Age, fill=Survived)) +
+  geom_violin(na.rm=TRUE, adjust=0.5) +
+  xlab("Ticket Class")
+```
+
